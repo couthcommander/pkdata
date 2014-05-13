@@ -23,3 +23,6 @@
 #'}
 #'
 NULL
+
+# new option, pkdata time-zone
+options(pkdata.tz = '')

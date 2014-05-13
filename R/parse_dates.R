@@ -31,7 +31,7 @@
 #' guessDateFormat(x)
 #' guessDateFormat(x, TRUE)
 
-guessDateFormat <- function(x, returnDates = FALSE, tz = '') {
+guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', '')) {
     x1 <- x
     # replace blanks with NA and remove
     x1[x1 == ""] <- NA
@@ -92,7 +92,7 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = '') {
     } else if(timePart == 2) {
         format <- paste(dateFormat, timeFormat)
     } else stop("cannot parse your time variable")
-    if(returnDates) return(as.POSIXlt(x, format=format, tz=tz))
+    if(returnDates) return(as.POSIXlt(gsub('[^0-9: ]', '', x), format=format, tz=tz))
     format
 }
 
@@ -119,7 +119,7 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = '') {
 #' x <- c("2014-01-15 01:51", "20140202 04:35:18")
 #' parse_dates(x)
 
-parse_dates <- function(x, tz = '') {
+parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
     res <- NULL
     fmt <- guessDateFormat(x, tz=tz)
     fmt <- tolower(gsub("%", "", fmt))
