@@ -17,6 +17,7 @@
 #'@importFrom lubridate parse_date_time
 #'@examples
 #'\dontrun{
+#'options(pkdata.tz='America/Chicago')
 #'dose.file <- read.csv('dosage.csv', stringsAsFactors = FALSE)
 #'drug.level.file <- read.csv('levels.csv', stringsAsFactors = FALSE)
 #'prepped <- prepareDoses(dose.file, drug.level.file)

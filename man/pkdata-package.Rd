@@ -9,6 +9,7 @@ This package will prepare data sets for PK data analysis.
 }
 \examples{
 \dontrun{
+options(pkdata.tz='America/Chicago')
 dose.file <- read.csv('dosage.csv', stringsAsFactors = FALSE)
 drug.level.file <- read.csv('levels.csv', stringsAsFactors = FALSE)
 prepped <- prepareDoses(dose.file, drug.level.file)
