@@ -1,0 +1,2 @@
+export("conformDoses", "guessDateFormat", "parse_dates", "prepareDoses", "trimDoses")
+importFrom(lubridate,parse_date_time)
