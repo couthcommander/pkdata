@@ -22,11 +22,10 @@ test_that("parse_dates creates date-times from vector", {
 })
 
 test_that("parse_dates fails on bad dates", {
+  expect_true(is.na(parse_dates("2007-03-12 NA")))
   expect_error(parse_dates("2014-02-29"))
   expect_error(parse_dates("07-22-14 6"))
   expect_error(parse_dates("2014-03-09 02:15:00"))
-  # what should this do?
-  # expect_error(parse_dates("2007-03-12 NA"))
   expect_warning(parse_dates("08/18/14 26:05"))
 })
 

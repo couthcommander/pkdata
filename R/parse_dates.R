@@ -120,10 +120,11 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', 
 #' parse_dates(x)
 
 parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
-    res <- NULL
-    # remove invalid characters
-    x <- gsub('[^0-9: ]', '', x)
+    res <- rep(NA, length(x))
+    # look for NA, replace if found
+    x[grepl("NA", x)] <- NA
     fmt <- guessDateFormat(x, tz=tz)
+    if(is.na(fmt)) return(res)
     fmt <- tolower(gsub("%", "", fmt))
     # space indicates time part
     if(grepl(" ", fmt)) {
