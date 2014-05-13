@@ -3,7 +3,7 @@
 \alias{guessDateFormat}
 \title{Determine Format of Date and Date-Time Variables}
 \usage{
-guessDateFormat(x, returnDates = FALSE, tz = "")
+guessDateFormat(x, returnDates = FALSE, tz = getOption("pkdata.tz", ""))
 }
 \arguments{
 \item{x}{character vector of dates or date-times}

@@ -3,7 +3,7 @@
 \alias{parse_dates}
 \title{Parse Date and Date-Time Variables}
 \usage{
-parse_dates(x, tz = "")
+parse_dates(x, tz = getOption("pkdata.tz", ""))
 }
 \arguments{
 \item{x}{character vector of dates or date-times}

@@ -24,5 +24,17 @@
 #'
 NULL
 
-# new option, pkdata time-zone
-options(pkdata.tz = '')
+#'Internal objects.
+#'
+#'Internal objects.
+#'
+#'This function should not be called by the user.
+#'
+#'@name pkdata-internal
+#'@keywords internal
+#'
+
+.onLoad <- function(...) {
+  # new option, pkdata time-zone
+  options(pkdata.tz = getOption('pkdata.tz', ''))
+}
