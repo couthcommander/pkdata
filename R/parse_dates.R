@@ -100,9 +100,9 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = '') {
 #'
 #' Given a vector of dates or date-times, create Date or POSIXct variables.
 #'
-#' \code{parse_dates} calls \code{\link[lubridate]{parse_date_time}}.  While
-#' \code{\link[lubridate]{parse_date_time}} accepts multiple date formats,
-#' \code{parse_dates} requires a consistent format.
+#' \code{parse_dates} calls \code{\link[lubridate]{parse_date_time}} from the
+#' lubridate package.  While \code{\link[lubridate]{parse_date_time}} accepts
+#' multiple date formats, \code{parse_dates} requires a consistent format.
 #'
 #' @aliases parse_dates
 #' @param x character vector of dates or date-times

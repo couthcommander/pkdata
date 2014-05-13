@@ -237,7 +237,7 @@ trimDoses <- function(doseData, drugLevelData,
 #'
 #' Create a dose data set with conforming data, and remove invalid records.
 #'
-#' Wrapper function for \code{link{conformDoses}} and \code{link{trimDoses}}.
+#' Wrapper function for \code{\link{conformDoses}} and \code{\link{trimDoses}}.
 #'
 #' @aliases prepareDoses
 #' @param doseData data.frame; data set with dose information

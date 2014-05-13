@@ -18,9 +18,9 @@ vector of Date or POSIXct objects
 Given a vector of dates or date-times, create Date or POSIXct variables.
 }
 \details{
-\code{parse_dates} calls \code{\link[lubridate]{parse_date_time}}.  While
-\code{\link[lubridate]{parse_date_time}} accepts multiple date formats,
-\code{parse_dates} requires a consistent format.
+\code{parse_dates} calls \code{\link[lubridate]{parse_date_time}} from the
+lubridate package.  While \code{\link[lubridate]{parse_date_time}} accepts
+multiple date formats, \code{parse_dates} requires a consistent format.
 }
 \examples{
 x <- c("2014-01-15", "20140202")

@@ -53,7 +53,7 @@ data.frame, containing dose data
 Create a dose data set with conforming data, and remove invalid records.
 }
 \details{
-Wrapper function for \code{link{conformDoses}} and \code{link{trimDoses}}.
+Wrapper function for \code{\link{conformDoses}} and \code{\link{trimDoses}}.
 }
 \author{
 Cole Beck
