@@ -1,2 +1,4 @@
-library(devtools)
-install_github('pkdata', 'couthcommander')
+### Package Installation
+    !r
+    library(devtools)
+    install_github('pkdata', 'couthcommander')
