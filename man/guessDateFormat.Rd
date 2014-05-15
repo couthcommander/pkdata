@@ -3,28 +3,19 @@
 \alias{guessDateFormat}
 \title{Determine Format of Date and Date-Time Variables}
 \usage{
-guessDateFormat(x, returnDates = FALSE, tz = getOption("pkdata.tz", ""))
+guessDateFormat(x)
 }
 \arguments{
 \item{x}{character vector of dates or date-times}
-
-\item{returnDates}{logical value; determines if POSIXlt objects are returned
-or just the guessed format}
-
-\item{tz}{character string; specifies the time zone to be used for the
-conversion.  Defaults to the current time zone.}
 }
 \value{
-By default, returns a character string representing the format of the
-date-time variables.  If \code{returnDates} is TRUE, a vector of POSIXlt
-objects is returned.
+Returns a character string representing the format of the date-time
+variables.
 }
 \description{
 Given a vector of dates or date-times, determine the format if one is used
 consistently.  If inconsistentencies are found, the function will fail.
-The format can be used to create POSIXlt objects, which is done
-automatically if \code{returnDates} is set.  See \code{\link{strptime}} for
-examples of format specifications.
+See \code{\link{strptime}} for examples of format specifications.
 }
 \details{
 \code{guessDateFormat} is rigid when determining the date format.  For
@@ -37,7 +28,6 @@ before parsing.
 \examples{
 x <- c("2014-01-15", "20140202")
 guessDateFormat(x)
-guessDateFormat(x, TRUE)
 }
 \author{
 Cole Beck

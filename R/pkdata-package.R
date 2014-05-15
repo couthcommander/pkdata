@@ -37,5 +37,7 @@ NULL
 
 .onLoad <- function(...) {
   # new option, pkdata time-zone
-  options(pkdata.tz = getOption('pkdata.tz', ''))
+  tz <- Sys.timezone()
+  if(is.na(tz)) tz <- ''
+  options(pkdata.tz = tz)
 }

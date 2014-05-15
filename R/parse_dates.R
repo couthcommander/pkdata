@@ -2,9 +2,7 @@
 #'
 #' Given a vector of dates or date-times, determine the format if one is used
 #' consistently.  If inconsistentencies are found, the function will fail.
-#' The format can be used to create POSIXlt objects, which is done
-#' automatically if \code{returnDates} is set.  See \code{\link{strptime}} for
-#' examples of format specifications.
+#' See \code{\link{strptime}} for examples of format specifications.
 #'
 #' \code{guessDateFormat} is rigid when determining the date format.  For
 #' date-times it expects the date and time parts to be separated by a space.  It
@@ -15,13 +13,8 @@
 #'
 #' @aliases guessDateFormat
 #' @param x character vector of dates or date-times
-#' @param returnDates logical value; determines if POSIXlt objects are returned
-#' or just the guessed format
-#' @param tz character string; specifies the time zone to be used for the
-#' conversion.  Defaults to the current time zone.
-#' @return By default, returns a character string representing the format of the
-#' date-time variables.  If \code{returnDates} is TRUE, a vector of POSIXlt
-#' objects is returned.
+#' @return Returns a character string representing the format of the date-time
+#' variables.
 #'
 #' @export
 #' @rdname guessDateFormat
@@ -29,16 +22,15 @@
 #' @examples
 #' x <- c("2014-01-15", "20140202")
 #' guessDateFormat(x)
-#' guessDateFormat(x, TRUE)
 
-guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', '')) {
+guessDateFormat <- function(x) {
     x1 <- x
     # replace blanks with NA and remove
     x1[x1 == ""] <- NA
     x1 <- x1[!is.na(x1)]
     if(length(x1) == 0) return(NA)
-    # if it's already a time variable, set it to character
-    if("POSIXt" %in% class(x1[1])) {
+    # set to character string
+    if(!inherits(x1[1], "character")) {
       x1 <- as.character(x1)
     }
     dateTimes <- do.call(rbind, strsplit(x1, ' '))
@@ -61,6 +53,12 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', 
             timeFormat <- "%H:%M:%S"
         } else stop("timePart should have 1 or 2 colons")
     }
+    # sep is any non-numeric value found, hopefully / or -
+    sep <- unique(substr(gsub("[0-9]", "", na.omit(dateTimes[,datePart])), 1, 1))
+    if(length(sep) > 1 && "" %in% sep) {
+        sep <- sep[sep != '']
+    }
+    if(length(sep) > 1) stop("too many seperators in datePart")
     dates <- gsub("[^0-9]", "", na.omit(dateTimes[,datePart]))
     # maximum number of characters found in the date part
     dlen <- max(nchar(dates))
@@ -85,6 +83,8 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', 
     } else {
         stop(sprintf("datePart has unusual length: %s", dlen))
     }
+    # add sep back
+    dateFormat <- paste(substr(dateFormat, 1, 2), substr(dateFormat, 3, 4), substr(dateFormat, 5, 6), sep = sep)
     if(is.na(timeFormat)) {
         format <- dateFormat
     } else if(timePart == 1) {
@@ -92,7 +92,6 @@ guessDateFormat <- function(x, returnDates = FALSE, tz = getOption('pkdata.tz', 
     } else if(timePart == 2) {
         format <- paste(dateFormat, timeFormat)
     } else stop("cannot parse your time variable")
-    if(returnDates) return(as.POSIXlt(gsub('[^0-9: ]', '', x), format=format, tz=tz))
     format
 }
 
@@ -123,9 +122,9 @@ parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
     res <- rep(NA, length(x))
     # look for NA, replace if found
     x[grepl("NA", x)] <- NA
-    fmt <- guessDateFormat(x, tz=tz)
+    fmt <- guessDateFormat(x)
     if(is.na(fmt)) return(res)
-    fmt <- tolower(gsub("%", "", fmt))
+    fmt <- gsub("[^ymd ]", "", tolower(fmt))
     # space indicates time part
     if(grepl(" ", fmt)) {
         fmt <- sub(" .*$", "_hms", fmt)
