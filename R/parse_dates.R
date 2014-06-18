@@ -25,14 +25,14 @@
 
 guessDateFormat <- function(x) {
     x1 <- x
-    # replace blanks with NA and remove
-    x1[x1 == ""] <- NA
-    x1 <- x1[!is.na(x1)]
-    if(length(x1) == 0) return(NA)
     # set to character string
     if(!inherits(x1[1], "character")) {
       x1 <- as.character(x1)
     }
+    # replace blanks with NA and remove
+    x1[x1 == ""] <- NA
+    x1 <- x1[!is.na(x1)]
+    if(length(x1) == 0) return(NA)
     dateTimes <- do.call(rbind, strsplit(x1, ' '))
     for(i in ncol(dateTimes)) {
         dateTimes[dateTimes[,i] == "NA"] <- NA
