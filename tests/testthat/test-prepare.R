@@ -1,5 +1,7 @@
 context("Prepare Data Set")
 
+options(pkdata.tz='America/Chicago')
+
 x <- read.csv("dose1.csv", stringsAsFactors = FALSE)
 dld <- read.csv("druglevel.csv", stringsAsFactors = FALSE)
 
@@ -31,5 +33,5 @@ test_that("prepareDoses creates proper data set", {
   expect_true(inherits(y[,idt], "POSIXct"))
   expect_true(inherits(y[,bdt], "POSIXct"))
   expect_true(inherits(y[,odt], "POSIXct"))
-  expect_equal(nrow(y), 6)
+  expect_equal(nrow(y), 10)
 })

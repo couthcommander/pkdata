@@ -8,7 +8,6 @@
 #' @aliases sortDoses
 #' @param data data.frame; data set with dose information
 #' @param idVar character string; name of ID variable, defaults to id
-#' @param dateVar character string; name of date variable, defaults to date.dose
 #' @param infusionDoseTimeVar character string; name of infusion dose time
 #' variable
 #' @param bolusDoseTimeVar character string; name of bolus dose time variable

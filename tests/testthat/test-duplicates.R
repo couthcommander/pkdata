@@ -1,5 +1,7 @@
 context("Fix Dose Duplicates")
 
+options(pkdata.tz='America/Chicago')
+
 x <- read.csv("dose1.csv", stringsAsFactors = FALSE)
 dld <- read.csv("druglevel.csv", stringsAsFactors = FALSE)
 
@@ -94,4 +96,27 @@ test_that("fixDuplicates adds bolus doses", {
      bolusDoseTimeVar = bdt, otherDoseTimeVar = odt
   )
   expect_true(as.character(z[5,bdv]) == y[5,bdv]*2)
+})
+
+test_that("fixDuplicates plays well with imputeDoses", {
+  y <- prepareDoses(x, dld, drugLevelID = lv,
+    drugLevelTimeVar = dlt, drugLevelVar = dlv,
+    idVar = iv, dateVar = dv,
+    infusionDoseTimeVar = idt, infusionDoseVar = idv,
+    bolusDoseTimeVar = bdt, bolusDoseVar = bdv,
+    otherDoseTimeVar = odt, otherDoseVar = odv,
+    otherVars = ov, lookForward = lf
+  )
+  y <- y[c(1:2,2:10),]
+  y[2:3, 'inf.time.real'] <- "2014-03-08 22:00:00"
+  z <- imputeDoses(y, idVar = iv, dateVar = dv,
+    infusionDoseTimeVar = idt, infusionDoseVar = idv, maxskips = 3
+  )
+  d <- fixDuplicates(z, infusionDoseTimeVar = idt, infusionDoseVar = idv,
+    moveBolus = TRUE, bolusDoseTimeVar = bdt, bolusDoseVar = bdv
+  )
+  zz <- sortDoses(d, idVar = iv, infusionDoseTimeVar = idt,
+     bolusDoseTimeVar = bdt, otherDoseTimeVar = odt
+  )
+  expect_true(as.character(zz[10,bdt]) == "2014-03-08 22:00:00" && zz[10,'tobolus'] == 1)
 })

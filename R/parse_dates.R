@@ -119,6 +119,7 @@ guessDateFormat <- function(x) {
 #' parse_dates(x)
 
 parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
+    if(inherits(x, "POSIXct")) return(x)
     res <- rep(NA, length(x))
     # look for NA, replace if found
     x[grepl("NA", x)] <- NA

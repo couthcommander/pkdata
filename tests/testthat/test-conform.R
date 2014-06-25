@@ -1,5 +1,7 @@
 context("Conform Data Set")
 
+options(pkdata.tz='America/Chicago')
+
 x <- read.csv("dose1.csv", stringsAsFactors = FALSE)
 
 iv <- "id"
@@ -35,8 +37,11 @@ test_that("conformDoses rounds dates to nearest hour", {
     infusionDoseTimeVar = idt, infusionDoseVar = idv
   )
   rounded <- parse_dates(c("2014-03-07 24:00","2014-03-08 22:00",
-    "2014-03-09 03:00","2014-03-09 08:00"
+    "2014-03-09 03:00","2014-03-09 08:00","2014-11-01 22:00",
+    "2014-11-02 00:00","2014-11-02 01:00","2014-11-02 02:00","2014-11-02 05:00"
   ))
+  # unable to force 1am CDT, so subtract hour from CST
+  rounded[7] <- rounded[7]-dhours(1)
   expect_equal(y[,idt], rounded)
 })
 
@@ -55,7 +60,7 @@ test_that("conformDoses removes blank rows", {
   y <- conformDoses(x1, idVar = iv, dateVar = dv,
     infusionDoseTimeVar = idt, infusionDoseVar = idv
   )
-  expect_equal(nrow(y), 4)
+  expect_equal(nrow(y), 9)
 })
 
 test_that("conformDoses fails on bad columns", {
@@ -63,3 +68,8 @@ test_that("conformDoses fails on bad columns", {
   expect_error(conformDoses(x, idVar = "badid", dateVar = dv, infusionDoseTimeVar = idt, infusionDoseVar = idv))
   expect_error(conformDoses(x, idVar = "badid", dateVar = dv, infusionDoseTimeVar = idt, infusionDoseVar = idv, otherVars = "extraneous"))
 })
+
+parse_dates(c("2014-03-07 24:00","2014-03-08 22:00","2014-03-09 03:00","2014-03-09 08:00","2014-11-01 22:00","2014-11-02 00:00","2014-11-02 01:00","2014-11-02 02:00","2014-11-02 05:00"))
+parse_dates(c("2014-03-07 24:00","2014-03-08 22:00","2014-03-09 03:00","2014-03-09 08:00","2014-11-01 22:00","2014-11-02 00:00","2014-11-02 01:00"))
+parse_dates(c("2014-11-02 00:00","2014-11-02 01:00"))
+parse_dates(c("2014-11-02 01:00"))

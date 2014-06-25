@@ -11,8 +11,6 @@ sortDoses(data, idVar = "id", infusionDoseTimeVar = NULL,
 
 \item{idVar}{character string; name of ID variable, defaults to id}
 
-\item{dateVar}{character string; name of date variable, defaults to date.dose}
-
 \item{infusionDoseTimeVar}{character string; name of infusion dose time
 variable}
 

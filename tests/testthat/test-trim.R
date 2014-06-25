@@ -1,5 +1,7 @@
 context("Trim Data Set")
 
+options(pkdata.tz='America/Chicago')
+
 x <- read.csv("dose1.csv", stringsAsFactors = FALSE)
 dld <- read.csv("druglevel.csv", stringsAsFactors = FALSE)
 
@@ -43,7 +45,7 @@ test_that("trimDoses removes invalid dates using druglevel data", {
     bolusDoseTimeVar = bdt, bolusDoseVar = bdv,
     otherDoseTimeVar = odt, otherDoseVar = odv
   )
-  expect_equal(nrow(z), 6)
+  expect_equal(nrow(z), 10)
   z <- trimDoses(y, dld, drugLevelID = lv,
     drugLevelTimeVar = dlt, drugLevelVar = dlv,
     infusionDoseTimeVar = idt, infusionDoseVar = idv,
@@ -51,7 +53,7 @@ test_that("trimDoses removes invalid dates using druglevel data", {
     otherDoseTimeVar = odt, otherDoseVar = odv,
     lookForward = 0
   )
-  expect_equal(nrow(z), 6)
+  expect_equal(nrow(z), 10)
 })
 
 test_that("trimDoses removes invalid dates using last", {
@@ -62,7 +64,7 @@ test_that("trimDoses removes invalid dates using last", {
     otherDoseTimeVar = odt, otherDoseVar = odv,
     lookForward = lf, last = 1
   )
-  expect_equal(nrow(z), 2)
+  expect_equal(nrow(z), 7)
   z <- trimDoses(y, dld, drugLevelID = lv,
     drugLevelTimeVar = dlt, drugLevelVar = dlv,
     infusionDoseTimeVar = idt, infusionDoseVar = idv,
@@ -70,7 +72,7 @@ test_that("trimDoses removes invalid dates using last", {
     otherDoseTimeVar = odt, otherDoseVar = odv,
     lookForward = 0, last = 3
   )
-  expect_equal(nrow(z), 4)
+  expect_equal(nrow(z), 9)
 })
 
 test_that("trimDoses fails on bad columns", {

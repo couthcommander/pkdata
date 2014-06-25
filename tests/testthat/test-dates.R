@@ -1,5 +1,7 @@
 context("Create Dates")
 
+options(pkdata.tz='America/Chicago')
+
 test_that("parse_dates creates dates from vector", {
   x <- c("2014-01-15", "20140202")
   y <- as.Date(c("2014-01-15", "2014-02-02"))
@@ -19,6 +21,13 @@ test_that("parse_dates creates date-times from vector", {
   x <- c("03272014 13:52:44", "04/05/2014 21:21")
   y <- as.POSIXct(c("2014-03-27 13:52:44", "2014-04-05 21:21:00"))
   expect_equal(parse_dates(x), y)
+})
+
+test_that("parse_dates is consistent on DST border", {
+  x <- c("2014-03-09 01:00", "2014-03-09 03:00", "2014-11-02 00:59",
+  "2014-11-02 01:00", "2014-11-02 01:59", "2014-11-02 02:00")
+  y <- dst(parse_dates(x))
+  expect_equal(y, c(FALSE, TRUE, TRUE, FALSE, FALSE, FALSE))
 })
 
 test_that("parse_dates fails on bad dates", {
