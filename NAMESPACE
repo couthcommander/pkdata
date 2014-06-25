@@ -1,2 +1,2 @@
-export("conformDoses", "guessDateFormat", "parse_dates", "prepareDoses", "trimDoses", "fixDuplicates", "sortDoses")
+export("conformDoses", "guessDateFormat", "parse_dates", "prepareDoses", "trimDoses", "fixDuplicates", "sortDoses", "imputeDoses")
 importFrom(lubridate,parse_date_time)
