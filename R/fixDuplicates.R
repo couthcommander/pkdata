@@ -52,7 +52,7 @@ fixDuplicates <- function(data, idVar="id", infusionDoseTimeVar=NULL, infusionDo
     if(!all.equal(seq(nrow(data)), order(data[,idcol]))) stop(sprintf("data set should be ordered by %s", idVar))
     # find rows duplicated by ID and infusion dose time
     # duprows <- which(unlist(tapply(data[,idtv], data[,idcol], duplicated)))
-    duprows <- which(unlist(tapply(data[,idtv], data[,idcol], FUN=function(i) c(FALSE, diff(i)==0))))
+    duprows <- which(unlist(tapply(infuse.time, data[,idcol], FUN=function(i) c(FALSE, diff(i)==0))))
     # unless infuse.time is NA
     duprows <- duprows[!is.na(data[duprows, idtv])]
     for(i in duprows) {
@@ -117,7 +117,7 @@ fixDuplicates <- function(data, idVar="id", infusionDoseTimeVar=NULL, infusionDo
     if(!is.null(bolus.time)) {
         # find rows duplicated by ID and bolus dose time
         # duprows <- which(unlist(tapply(data[,bdtv], data[,idcol], duplicated)))
-        duprows <- which(unlist(tapply(data[,bdtv], data[,idcol], FUN=function(i) c(FALSE, diff(i)==0))))
+        duprows <- which(unlist(tapply(bolus.time, data[,idcol], FUN=function(i) c(FALSE, diff(i)==0))))
         # unless bolus.time is NA
         duprows <- duprows[!is.na(data[duprows, bdtv])]
         # set duplicate bolus data to NA, but add dose value to first instance
