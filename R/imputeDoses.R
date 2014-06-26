@@ -36,16 +36,18 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
     if(is.na(rtcol)) stop("real time column is not present")
     if(!is.numeric(maxskips) || maxskips < 0) maxskips <- 0
 
+    # change datetime strings to datetime objects
+    data[,idtv] <- parse_dates(data[,idtv])
+    data[,rtcol] <- parse_dates(data[,rtcol])
     # set infusion dose to NA if time is missing
     data[is.na(data[,idtv]) & !is.na(data[,idv]), idv] <- NA
     # determine format for datetime variables
-    dateformatA <- guessDateFormat(data[,rtcol])
+    #dateformatA <- guessDateFormat(data[,rtcol])
     dateformatB <- guessDateFormat(data[,datecol])
-    dateformatC <- guessDateFormat(data[,idtv])
+    #dateformatC <- guessDateFormat(data[,idtv])
     # determine total number of skips we need to impute
     # split by ID, count occurrences of time difference (in hours) greater than 1
-    times <- parse_dates(data[,idtv])
-    missingness <- sapply(split(times, f=data[,idcol]), FUN=function(i) {
+    missingness <- sapply(split(data[,idtv], f=data[,idcol]), FUN=function(i) {
         missed <- as.numeric(diff(i[!is.na(i)]), units="hours")-1
         sum(ifelse(missed >= 0 & missed <= maxskips, missed, ifelse(missed < 0, 0, 1)))
     })
@@ -62,7 +64,7 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
     for(i in seq(length(ids))) {
         # subset data with non-missing dose values by each ID
         info <- subset(data, subset=data[,idcol] == ids[i] & !is.na(data[,idv]))
-        infuse.date <- parse_dates(info[,idtv])
+        infuse.date <- info[,idtv]
         # get time interval between all points
         interval <- as.numeric(diff(infuse.date), units="hours")-1
         if(maxskips > 0) {
@@ -76,9 +78,9 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
                     # don't impute when dose value is ZERO on both sides (j-1, j)
                     if(val != 0 || info[j,idv] != 0) {
                         imp[index,idcol] <- info[j-1,idcol]
-                        imp[index, rtcol] <- format(time, dateformatA)
+                        imp[index, rtcol] <- time
                         imp[index, datecol] <- format(time, dateformatB)
-                        imp[index, idtv] <- format(time, dateformatC)
+                        imp[index, idtv] <- time
                         imp[index,idv] <- val
                         imp$skips[index] <- 1
                     } else {

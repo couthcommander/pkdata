@@ -28,6 +28,13 @@ test_that("imputeDoses imputes missing hours up to maxskips", {
   expect_equal(z[,idv], c(500,0,100,0,100,0,100,250,0,200,200,0,250,0,250))
 })
 
+test_that("imputeDoses creates datetime objects", {
+  z <- imputeDoses(y, idVar = iv, dateVar = dv,
+    infusionDoseTimeVar = idt, infusionDoseVar = idv, maxskips = 3
+  )
+  expect_true(inherits(z[,idt], "POSIXct"))
+})
+
 test_that("imputeDoses fails on bad columns", {
   expect_error(imputeDoses(y))
   expect_error(imputeDoses(y, dateVar = "oops",
