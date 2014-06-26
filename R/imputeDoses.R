@@ -39,9 +39,9 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
     # set infusion dose to NA if time is missing
     data[is.na(data[,idtv]) & !is.na(data[,idv]), idv] <- NA
     # determine format for datetime variables
-    #dateformatA <- guessDateFormat(data[,rtcol])
+    dateformatA <- guessDateFormat(data[,rtcol])
     dateformatB <- guessDateFormat(data[,datecol])
-    #dateformatC <- guessDateFormat(data[,idtv])
+    dateformatC <- guessDateFormat(data[,idtv])
     # determine total number of skips we need to impute
     # split by ID, count occurrences of time difference (in hours) greater than 1
     times <- parse_dates(data[,idtv])
@@ -76,9 +76,9 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
                     # don't impute when dose value is ZERO on both sides (j-1, j)
                     if(val != 0 || info[j,idv] != 0) {
                         imp[index,idcol] <- info[j-1,idcol]
-                        imp[index,rtcol] <- time
-                        imp[index,datecol] <- format(time, dateformatB)
-                        imp[index,idtv] <- time
+                        imp[index, rtcol] <- format(time, dateformatA)
+                        imp[index, datecol] <- format(time, dateformatB)
+                        imp[index, idtv] <- format(time, dateformatC)
                         imp[index,idv] <- val
                         imp$skips[index] <- 1
                     } else {
