@@ -59,7 +59,9 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
     # init new rows as the first row, and reset values
     imp <- data[c(seq(nrow(data)),rep(NA,nskips)),]
     ix <- seq(index,nrow(imp))
-    # imp$tobolus[ix] <- imp$change[ix] <- 0
+    # initialize tobolus/change if available
+    if('tobolus' %in% names(imp)) imp[ix, 'tobolus'] <- 0
+    if('change' %in% names(imp)) imp[ix, 'change'] <- 0
     imp$skips <- 0
     for(i in seq(length(ids))) {
         # subset data with non-missing dose values by each ID
