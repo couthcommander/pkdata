@@ -63,6 +63,8 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
     if('tobolus' %in% names(imp)) imp[ix, 'tobolus'] <- 0
     if('change' %in% names(imp)) imp[ix, 'change'] <- 0
     imp$skips <- 0
+    imp$imputed <- 0
+    imp[ix, 'imputed'] <- 1
     for(i in seq(length(ids))) {
         # subset data with non-missing dose values by each ID
         info <- subset(data, subset=data[,idcol] == ids[i] & !is.na(data[,idv]))
