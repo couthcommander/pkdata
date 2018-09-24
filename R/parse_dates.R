@@ -125,10 +125,10 @@ parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
     x[grepl("NA", x)] <- NA
     fmt <- guessDateFormat(x)
     if(is.na(fmt)) return(res)
-    fmt <- gsub("[^ymd ]", "", tolower(fmt))
+    fmt <- gsub("[^YMD ]", "", toupper(fmt))
     # space indicates time part
     if(grepl(" ", fmt)) {
-        fmt <- sub(" .*$", "_hms", fmt)
+        fmt <- sub(" .*$", "_HMS", fmt)
         res <- parse_date_time(x, orders = fmt, tz = tz, truncated = 2)
     } else {
         res <- as.Date(parse_date_time(x, orders = fmt, tz = tz))

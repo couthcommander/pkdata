@@ -2,6 +2,11 @@ context("Create Dates")
 
 options(pkdata.tz='America/Chicago')
 
+test_that("guessDateFormat fails with missing leading zero", {
+  x <- c("12/19/2013", "2/19/2014", "9/17/2012", "1/8/2014", "11/20/2013")
+  expect_error(guessDateFormat(x))
+})
+
 test_that("parse_dates creates dates from vector", {
   x <- c("2014-01-15", "20140202")
   y <- as.Date(c("2014-01-15", "2014-02-02"))

@@ -179,6 +179,7 @@ trimDoses <- function(doseData, drugLevelData,
 #             drug.info$datetime <- as.POSIXlt(drug.info[,drugLevelTimeVar], format=dformat, tz=TZONE)
             drug.info$datetime <- parse_dates(drug.info[,drugLevelTimeVar])
             # first drug level datetime
+            # re-write to avoid DRY
             pd1 <- drug.info[head(order(drug.info$datetime), 1), "datetime"]
             plasma.dates[i,2] <- format(pd1, format=dformat)
             # last drug level datetime
