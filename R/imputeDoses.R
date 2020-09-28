@@ -77,7 +77,7 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
             for(j in skipped) {
                 # locf previous dose value (j-1) until current value (j)
                 val <- info[j-1,idv]
-                time <- infuse.date[j-1] + dhours(1)
+                time <- infuse.date[j-1] + lubridate::dhours(1)
                 while(time < infuse.date[j]) {
                     # don't impute when dose value is ZERO on both sides (j-1, j)
                     if(val != 0 || info[j,idv] != 0) {
@@ -91,7 +91,7 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
                         # NA skips will be thrown out
                         imp$skips[index] <- NA
                     }
-                    time <- time + dhours(1)
+                    time <- time + lubridate::dhours(1)
                     index <- index + 1
                 }
             }
@@ -104,7 +104,7 @@ imputeDoses <- function(data, idVar="id", dateVar="date.dose", infusionDoseTimeV
             for(j in seq_along(bigskip)) {
                 # insert a ZERO val in first missing record
                 time <- infuse.date[bigskip[j]-1]
-                time <- time + dhours(1)
+                time <- time + lubridate::dhours(1)
                 imp[index,idcol] <- info[bigskip[j]-1,idcol]
                 imp[index,rtcol] <- time
                 imp[index,datecol] <- format(time, dateformatB)

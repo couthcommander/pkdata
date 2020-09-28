@@ -1,2 +1,2 @@
-library(testthat)
-test_check("pkdata")
+#library(testthat)
+#test_check("pkdata")

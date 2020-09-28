@@ -179,20 +179,15 @@ trimDoses <- function(doseData, drugLevelData,
 #             drug.info$datetime <- as.POSIXlt(drug.info[,drugLevelTimeVar], format=dformat, tz=TZONE)
             drug.info$datetime <- parse_dates(drug.info[,drugLevelTimeVar])
             # first drug level datetime
-            # re-write to avoid DRY
-            pd1 <- drug.info[head(order(drug.info$datetime), 1), "datetime"]
+            pd1 <- min(drug.info$datetime, na.rm = TRUE)
             plasma.dates[i,2] <- format(pd1, format=dformat)
             # last drug level datetime
-            pd2 <- drug.info[tail(order(drug.info$datetime), 1), "datetime"]
+            pd2 <- max(drug.info$datetime, na.rm = TRUE)
             if(!is.na(last)) {
-              pd1 <- pd1 + ddays(last + 1)
-              second(pd1) <- 0
-              minute(pd1) <- 0
-              hour(pd1) <- 0
-#               pd1$mday <- pd1$mday + last + 1
-#               pd1$sec <- 0
-#               pd1$min <- 0
-#               pd1$hour <- 0
+              pd1 <- pd1 + lubridate::ddays(last + 1)
+              lubridate::second(pd1) <- 0
+              lubridate::minute(pd1) <- 0
+              lubridate::hour(pd1) <- 0
               pd2 <- pd1
             }
             plasma.dates[i,3] <- format(pd2, format=dformat)
@@ -212,7 +207,7 @@ trimDoses <- function(doseData, drugLevelData,
         } else {
             startpoint <- plasma.dates[ix,2]
             # subtract lookForward (usually 1 week) from startpoint
-            startpoint <- startpoint - ddays(lookForward)
+            startpoint <- startpoint - lubridate::ddays(lookForward)
             # check doses for infusion times
             if(useInfusion && !is.na(doseData[i,rtc])) {
                 # infuse record invalid b/c before startpoint or after endpoint
@@ -266,6 +261,18 @@ trimDoses <- function(doseData, drugLevelData,
 #' @export
 #' @rdname prepareDoses
 #' @author Cole Beck
+#'
+#' @examples
+#' options(pkdata.tz='America/Chicago')
+#' dose.file <- read.csv(system.file('extdata', 'dosage.csv', package = 'pkdata'),
+#'                       stringsAsFactors = FALSE)
+#' drug.level.file <- read.csv(system.file('extdata', 'druglevel.csv', package = 'pkdata'),
+#'                             stringsAsFactors = FALSE)
+#' prepped <- prepareDoses(dose.file, drug.level.file,
+#'      infusionDoseTimeVar='inf.time', infusionDoseVar='inf.dose',
+#'      bolusDoseTimeVar='bol.time', bolusDoseVar='bol.dose',
+#'      otherDoseTimeVar='patch.time', otherDoseVar='patch.dose',
+#'      otherVars=c('gender','weight'))
 
 prepareDoses <- function(doseData, drugLevelData,
                     drugLevelID="id", drugLevelTimeVar="date.time", drugLevelVar="fent.level",

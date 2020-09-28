@@ -65,13 +65,13 @@ fixDuplicates <- function(data, idVar="id", infusionDoseTimeVar=NULL, infusionDo
         }
         solved <- FALSE
         # if pair is rounded, consider rounding down
-        if(minute(real.time[pair]) != 0) {
+        if(lubridate::minute(real.time[pair]) != 0) {
             index <- pair-1
             # index should be previous row with valid infusion time
             while(index > 1 && is.na(data[index,idtv]) && data[index,idcol] == data[pair,idcol]) {
                 index <- index-1
             }
-            tmp <- infuse.time[pair] - dhours(1)
+            tmp <- infuse.time[pair] - lubridate::dhours(1)
             # if first record (for given ID) or there's a skip, round down
             if(index == 0 || data[index,idcol] != data[pair,idcol] || tmp > infuse.time[index]) {
                 data[pair, idtv] <- format(tmp, inf.format)
@@ -79,13 +79,13 @@ fixDuplicates <- function(data, idVar="id", infusionDoseTimeVar=NULL, infusionDo
             }
         }
         # if i is rounded, consider rounding up
-        if(!solved && minute(real.time[i]) != 0) {
+        if(!solved && lubridate::minute(real.time[i]) != 0) {
             index <- i+1
             # index should be next row with valid infusion time
             while(is.na(data[index,idtv]) && data[index,idcol] == data[i,idcol]) {
                 index <- index+1
             }
-            tmp <- infuse.time[i] + dhours(1)
+            tmp <- infuse.time[i] + lubridate::dhours(1)
             # if last record (for given ID) or there's a skip, round up
             if(data[index,idcol] != data[i,idcol] || infuse.time[index] > tmp) {
                 data[i, idtv] <- format(tmp, inf.format)
@@ -95,7 +95,7 @@ fixDuplicates <- function(data, idVar="id", infusionDoseTimeVar=NULL, infusionDo
         # try moving duplicate to bolus (if using a bolus variable)
         if(!solved && !is.null(bolus.time)) {
             # don't set an even time to bolus, unless it's pair has already been set
-            if(minute(real.time[pair]) != 0 && data$tobolus[pair] == 0) {
+            if(lubridate::minute(real.time[pair]) != 0 && data$tobolus[pair] == 0) {
                 j <- pair
             } else {
                 j <- i

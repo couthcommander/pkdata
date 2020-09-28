@@ -46,20 +46,23 @@ guessDateFormat <- function(x) {
     timeFormat <- NA
     if(length(timePart)) {
         # find maximum number of colons in the timePart column
-        ncolons <- max(nchar(gsub("[^:]", "", na.omit(dateTimes[,timePart]))))
+        hasNoTm <- is.na(dateTimes[,timePart])
+        ncolons <- max(nchar(gsub("[^:]", "", dateTimes[!hasNoTm,timePart])))
         if(ncolons == 1) {
             timeFormat <- "%H:%M"
         } else if(ncolons == 2) {
             timeFormat <- "%H:%M:%S"
         } else stop("timePart should have 1 or 2 colons")
     }
+    hasNoDt <- is.na(dateTimes[,datePart])
+    nonMissDt <- dateTimes[!hasNoDt,datePart]
     # sep is any non-numeric value found, hopefully / or -
-    sep <- unique(substr(gsub("[0-9]", "", na.omit(dateTimes[,datePart])), 1, 1))
+    sep <- unique(substr(gsub("[0-9]", "", nonMissDt), 1, 1))
     if(length(sep) > 1 && "" %in% sep) {
         sep <- sep[sep != '']
     }
     if(length(sep) > 1) stop("too many seperators in datePart")
-    dates <- gsub("[^0-9]", "", na.omit(dateTimes[,datePart]))
+    dates <- gsub("[^0-9]", "", nonMissDt)
     # maximum number of characters found in the date part
     dlen <- max(nchar(dates))
     dateFormat <- NA
@@ -137,6 +140,6 @@ parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
 }
 
 round_hours <- function(x) {
-    toAdd <- ifelse(minute(x) >= 30, dhours(1), dhours(0))
-    floor_date(x, unit = 'hour') + toAdd
+    toAdd <- ifelse(lubridate::minute(x) >= 30, lubridate::dhours(1), lubridate::dhours(0))
+    lubridate::floor_date(x, unit = 'hour') + toAdd
 }

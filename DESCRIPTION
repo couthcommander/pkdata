@@ -1,13 +1,17 @@
 Package: pkdata
 Type: Package
 Title: Creates PK Data
-Version: 1.01
-Date: 2018-09-24
-Author: Cole Beck
-Maintainer: Cole Beck <cole.beck@vanderbilt.edu>
-Description: Prepare data sets
-License: GPL (>= 2)
-Depends:
-    lubridate
-Suggests:
-    testthat
+Version: 1.02
+Date: 2020-09-28
+Maintainer: Cole Beck <cole.beck@vumc.org>
+Authors@R: 
+    c(person("Cole", "Beck", role = c("aut", "cre"),
+          email = "cole.beck@vumc.org",
+          comment = c(ORCID = "0000-0002-6849-6255")),
+    person("Leena", "Choi", role = "aut",
+          email = "naturechoi@gmail.com"))
+Description: Prepare data sets. Add more description as
+    this should be three or four sentences.
+License: GPL (>= 3)
+Depends: lubridate
+RoxygenNote: 7.1.1
