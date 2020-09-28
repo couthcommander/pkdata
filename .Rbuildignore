@@ -1,1 +1,5 @@
-README.md
+^README\.md$
+^cran-comments\.md$
+^\.git$
+^tests$
+^CRAN-RELEASE$
