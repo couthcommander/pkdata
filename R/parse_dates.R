@@ -122,24 +122,26 @@ guessDateFormat <- function(x) {
 #' parse_dates(x)
 
 parse_dates <- function(x, tz = getOption('pkdata.tz', '')) {
-    if(inherits(x, "POSIXct")) return(x)
-    res <- rep(NA, length(x))
-    # look for NA, replace if found
-    x[grepl("NA", x)] <- NA
-    fmt <- guessDateFormat(x)
-    if(is.na(fmt)) return(res)
-    fmt <- gsub("[^ymd ]", "", tolower(fmt))
-    # space indicates time part
-    if(grepl(" ", fmt)) {
-        fmt <- sub(" .*$", "_HMS", fmt)
-        res <- parse_date_time(x, orders = fmt, tz = tz, truncated = 2)
-    } else {
-        res <- as.Date(parse_date_time(x, orders = fmt, tz = tz))
-    }
-    res
+  if(inherits(x, "POSIXct")) return(x)
+  res <- rep(NA, length(x))
+  # look for NA, replace if found
+  x[grepl("NA", x)] <- NA
+  fmt <- guessDateFormat(x)
+  if(is.na(fmt)) return(res)
+  fmt <- gsub("[^ymd ]", "", tolower(fmt))
+  # space indicates time part
+  if(grepl(" ", fmt)) {
+    fmt <- sub(" .*$", "_HMS", fmt)
+    # if time part is missing, set to NA
+    x[!grepl(" ", sub('[[:space:]]$', '', x))] <- NA
+    res <- lubridate::parse_date_time(x, orders = fmt, tz = tz, truncated = 2)
+  } else {
+    res <- as.Date(lubridate::parse_date_time(x, orders = fmt, tz = tz))
+  }
+  res
 }
 
 round_hours <- function(x) {
-    toAdd <- ifelse(lubridate::minute(x) >= 30, lubridate::dhours(1), lubridate::dhours(0))
-    lubridate::floor_date(x, unit = 'hour') + toAdd
+  toAdd <- ifelse(lubridate::minute(x) >= 30, lubridate::dhours(1), lubridate::dhours(0))
+  lubridate::floor_date(x, unit = 'hour') + toAdd
 }

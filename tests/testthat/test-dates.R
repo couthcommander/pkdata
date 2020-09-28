@@ -39,7 +39,7 @@ test_that("parse_dates fails on bad dates", {
   expect_true(is.na(parse_dates("2007-03-12 NA")))
   expect_error(parse_dates("2014-02-29"))
   expect_error(parse_dates("07-22-14 6"))
-  expect_error(parse_dates("2014-03-09 02:15:00"))
+  expect_warning(parse_dates("2014-03-09 02:15:00"))
   expect_warning(parse_dates("08/18/14 26:05"))
 })
 
@@ -53,5 +53,5 @@ test_that("round_halfhours works around DST", {
       "2014-03-09 01:00:00", "2014-03-09 01:00:00", "2014-03-09 03:00:00",
       "2014-03-09 03:00:00", "2014-11-02 01:00:00", "2014-11-02 01:00:00",
       "2014-11-02 02:00:00", "2014-11-02 02:00:00", "2014-11-02 03:00:00"))
-  expect_equal(round_hours(x), y)
+  expect_equal(pkdata:::round_hours(x), y)
 })

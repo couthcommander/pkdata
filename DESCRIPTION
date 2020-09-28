@@ -1,7 +1,7 @@
 Package: pkdata
 Type: Package
-Title: Creates PK Data
-Version: 1.02
+Title: Creates Pharmacokinetic/Pharmacodynamic (PK/PD) Data
+Version: 0.1.0
 Date: 2020-09-28
 Maintainer: Cole Beck <cole.beck@vumc.org>
 Authors@R: 
@@ -10,8 +10,9 @@ Authors@R:
           comment = c(ORCID = "0000-0002-6849-6255")),
     person("Leena", "Choi", role = "aut",
           email = "naturechoi@gmail.com"))
-Description: Prepare data sets. Add more description as
-    this should be three or four sentences.
+Description: Prepare pharmacokinetic/pharmacodynamic (PK/PD) data for PK/PD analyses. 
+    This package provides functions to standardize infusion and bolus dose data while
+    linking it to drug level or concentration data.
 License: GPL (>= 3)
 Depends: lubridate
 RoxygenNote: 7.1.1
