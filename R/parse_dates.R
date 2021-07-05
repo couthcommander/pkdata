@@ -57,37 +57,51 @@ guessDateFormat <- function(x) {
     hasNoDt <- is.na(dateTimes[,datePart])
     nonMissDt <- dateTimes[!hasNoDt,datePart]
     # sep is any non-numeric value found, hopefully / or -
-    sep <- unique(substr(gsub("[0-9]", "", nonMissDt), 1, 1))
+    # if there isn't a separator, it will be ""
+    DtMinusDate <- substr(gsub("[0-9]", "", nonMissDt), 1, 1)
+    sep <- unique(DtMinusDate)
     if(length(sep) > 1 && "" %in% sep) {
         sep <- sep[sep != '']
     }
-    if(length(sep) > 1) stop("too many seperators in datePart")
+    if(length(sep) > 1) stop("too many separators in datePart")
     dates <- gsub("[^0-9]", "", nonMissDt)
     # maximum number of characters found in the date part
     dlen <- max(nchar(dates))
+    # does every date include the separator?
+    hasSep <- sep != '' & DtMinusDate == sep
+    if(all(hasSep)) {
+      dateVals <- nonMissDt
+      useSep <- sep
+    } else {
+      dateVals <- dates
+      useSep <- ''
+    }
+    # create date format options
     dateFormat <- NA
-    dtfrm1 <- paste0("%y", "%m", "%d")
-    dtfrm2 <- paste0("%m", "%d", "%y")
-    dtfrm3 <- paste0("%Y", "%m", "%d")
-    dtfrm4 <- paste0("%m", "%d", "%Y")
+    dtfrm1 <- paste("%y", "%m", "%d", sep = useSep)
+    dtfrm2 <- paste("%m", "%d", "%y", sep = useSep)
+    dtfrm3 <- paste("%Y", "%m", "%d", sep = useSep)
+    dtfrm4 <- paste("%m", "%d", "%Y", sep = useSep)
     # when six, expect the century to be omitted
     if(dlen %in% 4:6) {
-        if(sum(is.na(as.Date(dates, format=dtfrm1))) == 0) {
+        if(sum(is.na(as.Date(dateVals, format=dtfrm1))) == 0) {
           dateFormat <- dtfrm1
-        } else if(sum(is.na(as.Date(dates, format=dtfrm2))) == 0) {
+        } else if(sum(is.na(as.Date(dateVals, format=dtfrm2))) == 0) {
           dateFormat <- dtfrm2
         } else stop("datePart format [four-six characters] is inconsistent")
     } else if(dlen %in% 7:8) {
-        if(sum(is.na(as.Date(dates, format=dtfrm3))) == 0) {
+        if(sum(is.na(as.Date(dateVals, format=dtfrm3))) == 0) {
           dateFormat <- dtfrm3
-        } else if(sum(is.na(as.Date(dates, format=dtfrm4))) == 0) {
+        } else if(sum(is.na(as.Date(dateVals, format=dtfrm4))) == 0) {
           dateFormat <- dtfrm4
         } else stop("datePart format [seven-eight characters] is inconsistent")
     } else {
         stop(sprintf("datePart has unusual length: %s", dlen))
     }
-    # add sep back
-    dateFormat <- paste(substr(dateFormat, 1, 2), substr(dateFormat, 3, 4), substr(dateFormat, 5, 6), sep = sep)
+    # add separator back if needed
+    if(sep != '' && useSep == '') {
+      dateFormat <- paste(substr(dateFormat, 1, 2), substr(dateFormat, 3, 4), substr(dateFormat, 5, 6), sep = sep)
+    }
     if(is.na(timeFormat)) {
         format <- dateFormat
     } else if(timePart == 1) {
