@@ -13,8 +13,7 @@ Authors@R:
 Description: Prepare pharmacokinetic/pharmacodynamic (PK/PD) data for PK/PD analyses. 
     This package provides functions to standardize infusion and bolus dose raw data 
     obtained from electronic health record (EHR) databases while linking it to drug 
-    level or concentration data. Additional functions useful for building PK/PD data 
-    will be added in future.
+    level or concentration data.
 License: GPL (>= 3)
 Depends: lubridate
 RoxygenNote: 7.1.1
