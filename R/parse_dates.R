@@ -84,15 +84,15 @@ guessDateFormat <- function(x) {
     dtfrm4 <- paste("%m", "%d", "%Y", sep = useSep)
     # when six, expect the century to be omitted
     if(dlen %in% 4:6) {
-        if(sum(is.na(as.Date(dateVals, format=dtfrm1))) == 0) {
+        if(sum(is.na(lubridate::fast_strptime(dateVals, format=dtfrm1, lt = FALSE))) == 0) {
           dateFormat <- dtfrm1
-        } else if(sum(is.na(as.Date(dateVals, format=dtfrm2))) == 0) {
+        } else if(sum(is.na(lubridate::fast_strptime(dateVals, format=dtfrm2, lt = FALSE))) == 0) {
           dateFormat <- dtfrm2
         } else stop("datePart format [four-six characters] is inconsistent")
     } else if(dlen %in% 7:8) {
-        if(sum(is.na(as.Date(dateVals, format=dtfrm3))) == 0) {
+        if(sum(is.na(lubridate::fast_strptime(dateVals, format=dtfrm3, lt = FALSE))) == 0) {
           dateFormat <- dtfrm3
-        } else if(sum(is.na(as.Date(dateVals, format=dtfrm4))) == 0) {
+        } else if(sum(is.na(lubridate::fast_strptime(dateVals, format=dtfrm4, lt = FALSE))) == 0) {
           dateFormat <- dtfrm4
         } else stop("datePart format [seven-eight characters] is inconsistent")
     } else {

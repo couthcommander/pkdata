@@ -1,8 +1,8 @@
 Package: pkdata
 Type: Package
 Title: Creates Pharmacokinetic/Pharmacodynamic (PK/PD) Data
-Version: 0.1.1
-Date: 2021-07-05
+Version: 0.1.2
+Date: 2021-09-08
 Maintainer: Cole Beck <cole.beck@vumc.org>
 Authors@R: 
     c(person("Cole", "Beck", role = c("aut", "cre"),
